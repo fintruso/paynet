@@ -13,8 +13,8 @@ Este projeto é uma API desenvolvida com Laravel que implementa autenticação v
 
 ```bash
 git clone https://github.com/fintruso/paynet.git
-cd paynet/src
-cp .env.example .env
+cd paynet
+cp src/.env.example src/.env
 docker-compose up -d --build
 docker exec -it app composer install
 docker exec -it app php artisan key:generate

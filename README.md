@@ -31,21 +31,148 @@ Acesse o projeto em `http://localhost:8000`
 
 A autenticação é realizada via Laravel Sanctum com tokens.
 
-### Rotas públicas
+### 📌 Rotas públicas
 
-- `POST /api/register` – Cadastro de novo usuário
-- `POST /api/login` – Login de usuário
-- `POST /api/forgot-password` – Solicitação de recuperação de senha
-- `POST /api/reset-password` – Redefinir senha
-- `GET /api/cep/{cep}` – Consulta de endereço via CEP (ViaCEP)
+#### `POST /api/register` – Cadastro de novo usuário
 
-### Rotas protegidas (`auth:sanctum`)
+**Payload**:
 
-- `GET /api/user` – Perfil do usuário autenticado
-- `POST /api/logout` – Logout
-- `GET /api/users` – Lista de usuários (paginação, filtro por nome e email)
+```json
+{
+  "name": "João da Silva",
+  "email": "joao2@teste.com",
+  "password": "senha123",
+  "password_confirmation": "senha123",
+  "cep": "01001000",
+  "numero": "1234"
+}
+```
 
-#### Admin (`can:isAdmin`)
+**Resposta esperada**:
+
+```json
+{
+  "message": "Usuário registrado com sucesso",
+  "user": {
+    "name": "João da Silva",
+    "email": "joao2@teste.com",
+    "role": "user",
+    "logradouro": "Praça da Sé",
+    "bairro": "Sé",
+    "cidade": "São Paulo",
+    "estado": "SP",
+    "numero": "1234",
+    "cep": "01001000",
+    "updated_at": "...",
+    "created_at": "...",
+    "id": 2
+  }
+}
+```
+
+---
+
+#### `POST /api/login` – Login de usuário
+
+**Payload**:
+
+```json
+{
+  "email": "joao@teste.com",
+  "password": "novasenha123"
+}
+```
+
+**Resposta esperada**:
+
+```json
+{
+  "access_token": "TOKEN_SANCTUM_AQUI",
+  "token_type": "Bearer"
+}
+```
+
+---
+
+#### `POST /api/password/forgot` – Recuperação de senha
+
+**Payload**:
+
+```json
+{
+  "email": "joao@teste.com"
+}
+```
+
+**Resposta esperada**:
+
+```json
+{
+  "message": "E-mail de recuperação enviado!"
+}
+```
+
+---
+
+#### `POST /api/password/reset` – Redefinir senha
+
+**Payload**:
+
+```json
+{
+  "email": "joao@teste.com",
+  "token": "TOKEN_RECEBIDO_POR_EMAIL",
+  "password": "novasenha123",
+  "password_confirmation": "novasenha123"
+}
+```
+
+**Resposta esperada**:
+
+```json
+{
+  "message": "Senha redefinida com sucesso!"
+}
+```
+
+---
+
+#### `GET /api/cep/{cep}` – Consulta de CEP
+
+**Resposta esperada** (exemplo com `01001000`):
+
+```json
+{
+  "logradouro": "Praça da Sé",
+  "bairro": "Sé",
+  "cidade": "São Paulo",
+  "estado": "SP"
+}
+```
+
+---
+
+#### `GET /api/teste` – Teste de rota
+
+Resposta:
+
+```json
+{
+  "mensagem": "rota funcionando"
+}
+```
+
+---
+
+### 🔒 Rotas protegidas (`auth:sanctum`)
+
+#### `GET /api/user` – Perfil do usuário autenticado  
+#### `POST /api/logout` – Logout  
+#### `GET /api/users` – Lista de usuários (paginação, filtro por nome e email)
+
+---
+
+### 🛡️ Rotas de administrador (`can:isAdmin`)
 
 - `PUT /api/users/{user}` – Atualizar usuário
 - `DELETE /api/users/{user}` – Remover usuário
